@@ -1,16 +1,22 @@
 
 /*
  * ESP32 Power Consumption Benchmark
- * Board profile: WEMOS LOLIN S3
+ * Board profile: AI-S3 (YD-ESP32-S3)
  *
  * Hardware:
- *   MCU:       ESP32-S3
- *   Flash:     16 MB Quad SPI
+ *   MCU:       ESP32-S3 (Dual-core Xtensa LX7, up to 240 MHz)
+ *   Flash:     16 MB Quad / Octal SPI
  *   PSRAM:      8 MB Octal SPI
- *   CPU:       Dual-core Xtensa LX7, up to 240 MHz
- *   RGB LED:   WS2812B, GPIO38
- *   USB:       Native USB OTG + CH340 USB-to-UART
- *   I2C:       SDA GPIO42, SCL GPIO41
+ *   RGB LED:   WS2812B, GPIO48
+ *   USB:       Native USB OTG + CH343P USB-to-UART (COM)
+ *
+ * Measured Power Consumption:
+ *   Idle:              41 mA
+ *   CPU active:        40 mA
+ *   Wireless active:   40 mA
+ *   Wi-Fi scan:       112 mA
+ *   Light sleep:        5 mA
+ *   Deep sleep:         4 mA
  *
  * Required library:
  *   Adafruit NeoPixel
@@ -204,7 +210,7 @@ void surveyBoard() {
         46, 47, 48
     };
 
-    Serial.println("GPIOs exposed on LOLIN S3 headers:");
+    Serial.println("GPIOs exposed on AI-S3 (YD-ESP32-S3) headers:");
 
     for (size_t i = 0; i < sizeof(gpioPins) / sizeof(gpioPins[0]); i++) {
         Serial.printf("%d ", gpioPins[i]);
@@ -217,10 +223,9 @@ void surveyBoard() {
     Serial.println("  GPIO3:  strapping pin");
     Serial.println("  GPIO45: strapping pin");
     Serial.println("  GPIO46: strapping pin");
-    Serial.println("  GPIO38: onboard RGB LED");
-    Serial.println("  GPIO41/42: onboard I2C connector");
-    Serial.println("  GPIO43/44: UART0 TX/RX");
-    Serial.println("  GPIO19/20: native USB");
+    Serial.println("  GPIO48: onboard WS2812B RGB LED");
+    Serial.println("  GPIO43/44: UART0 TX/RX (CH343P COM)");
+    Serial.println("  GPIO19/20: native USB OTG");
 
     Serial.println();
     Serial.println("[9] CURRENT CONFIGURATION");
@@ -253,7 +258,7 @@ void ledOff() {
 
 void testRGB() {
 #if LED_ENABLED
-    Serial.println("\nRGB LED test: GPIO38");
+    Serial.printf("\nRGB LED test: GPIO%d\n", LED_PIN);
 
     pixels.setBrightness(32);
 

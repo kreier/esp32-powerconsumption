@@ -121,44 +121,51 @@ All current values are in mA unless otherwise specified.
 
 ### Board overview
 
-| Board | Processor | Flash | RGB LED | Status |
-|---|---|---:|---|---|
-| ESP32-C3 dual USB-C | ESP32-C3 | TBD | Yes | Initial |
-| WEMOS S2 Mini | ESP32-S2 | TBD | TBD | Planned |
-| ESP32-C3 Super Mini | ESP32-C3 | TBD | Yes, variant dependent | Planned |
-| LOLIN S3 | ESP32-S3 | TBD | Yes, variant dependent | Planned |
+| Board | Processor | Flash | PSRAM | Status / Onboard LED | Status |
+|---|---|---:|---:|---|---|
+| AI-S3 (YD-ESP32-S3) | ESP32-S3 | 16 MB | 8 MB | WS2812B RGB (GPIO 48) | Measured |
+| ESP32-C3 dual USB-C | ESP32-C3 | 4 MB | — | WS2812 RGB (GPIO 8) | Measured |
+| ESP32-C3 Super Mini | ESP32-C3 | 4 MB | — | Blue LED (GPIO 8, active low) | Planned |
+| WEMOS S2 Mini v1.0.0 | ESP32-S2 | 4 MB | 2 MB | Blue LED (GPIO 15, active high) | Planned |
+| LOLIN S3 | ESP32-S3 | 16 MB | 8 MB | WS2812B RGB (GPIO 38) | Planned |
 
 ### Current consumption comparison
 
-| Test | C3 dual USB-C | S2 Mini | C3 Super Mini | LOLIN S3 |
-|---|---:|---:|---:|---:|
-| Idle | — | — | — | — |
-| CPU active | — | — | — | — |
-| Wi-Fi enabled | — | — | — | — |
-| Wi-Fi scan | — | — | — | — |
-| Light sleep | — | — | — | — |
-| Deep sleep | — | — | — | — |
-| RGB red | — | — | — | — |
-| RGB green | — | — | — | — |
-| RGB blue | — | — | — | — |
-| RGB white | — | — | — | — |
+| Test | AI-S3 (YD-ESP32-S3) | ESP32-C3 dual USB-C | C3 Super Mini | S2 Mini v1.0.0 | LOLIN S3 |
+|---|---:|---:|---:|---:|---:|
+| Idle (CPU on, Wi-Fi off) | 41 mA | 26 mA | — | — | — |
+| CPU active (100% compute) | 40 mA | 33 mA | — | — | — |
+| Wi-Fi enabled (STA idle) | 40 mA | 28 mA | — | — | — |
+| Wi-Fi scan (peak/avg) | 112 mA | 94 mA | — | — | — |
+| Light sleep | 5 mA | 9 mA | — | — | — |
+| Deep sleep | 4 mA | 9 mA | — | — | — |
+| RGB red | — | — | — | N/A | — |
+| RGB green | — | — | — | N/A | — |
+| RGB blue | — | — | — | N/A | — |
+| RGB white | — | — | — | N/A | — |
 
 ### Detailed measurement log
 
-| Board | Test | Average (mA) | Peak (mA) | Voltage (V) | Notes |
-|---|---|---:|---:|---:|---|
-| ESP32-C3 | Idle | — | — | — | |
-| ESP32-C3 | CPU active | — | — | — | |
-| ESP32-C3 | Wi-Fi enabled | — | — | — | |
-| ESP32-C3 | Wi-Fi scan | — | — | — | |
-| ESP32-C3 | Light sleep | — | — | — | |
-| ESP32-C3 | Deep sleep | — | — | — | |
+| Board | Test | Current (mA) | Supply | Notes |
+|---|---|---:|---|---|
+| AI-S3 (YD-ESP32-S3) | Idle | 41 | 5V (USB-C COM) | Wi-Fi off, RGB off, CH343P active |
+| AI-S3 (YD-ESP32-S3) | CPU active | 40 | 5V (USB-C COM) | Continuous arithmetic workload |
+| AI-S3 (YD-ESP32-S3) | Wi-Fi enabled | 40 | 5V (USB-C COM) | STA mode, disconnected, modem-sleep off |
+| AI-S3 (YD-ESP32-S3) | Wi-Fi scan | 112 | 5V (USB-C COM) | Active 2.4 GHz channel scan |
+| AI-S3 (YD-ESP32-S3) | Light sleep | 5 | 5V (USB-C COM) | Timer wake-up (30s) |
+| AI-S3 (YD-ESP32-S3) | Deep sleep | 4 | 5V (USB-C COM) | Timer wake-up (30s), RTC memory retained |
+| ESP32-C3 dual USB-C | Idle | 26 | 5V (USB-C COM) | Wi-Fi off, RGB off, 4MB Flash |
+| ESP32-C3 dual USB-C | CPU active | 33 | 5V (USB-C COM) | Continuous arithmetic workload |
+| ESP32-C3 dual USB-C | Wi-Fi enabled | 28 | 5V (USB-C COM) | STA mode, disconnected, modem-sleep off |
+| ESP32-C3 dual USB-C | Wi-Fi scan | 94 | 5V (USB-C COM) | Active 2.4 GHz channel scan |
+| ESP32-C3 dual USB-C | Light sleep | 9 | 5V (USB-C COM) | Timer wake-up (30s) |
+| ESP32-C3 dual USB-C | Deep sleep | 9 | 5V (USB-C COM) | Timer wake-up (30s), RTC memory retained |
 
 ## Future improvements
 
 - [ ] Add automatic board identification.
-- [ ] Add board-specific configuration profiles.
-- [ ] Add RGB LED identification and configuration.
+- [x] Add board-specific configuration profiles (single `SELECTED_BOARD` switch).
+- [x] Add RGB LED and standard status LED identification and configuration.
 - [ ] Add BLE scanning.
 - [ ] Add Wi-Fi scanning at configurable intervals.
 - [ ] Add Wi-Fi connection and data transmission tests.
